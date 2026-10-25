@@ -1,0 +1,17 @@
+# Repo files that are not part of the static site.
+# GitHub Pages still serves the repository root; Workers must not upload these.
+node_modules
+.git
+.github
+.wrangler
+.vscode
+.dev.vars
+.DS_Store
+package.json
+package-lock.json
+wrangler.jsonc
+README.md
+Installation.md
+.gitignore
+.assetsignore
+tests

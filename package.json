@@ -1,0 +1,16 @@
+{
+  "name": "minimal-startpage",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Cloudflare Worker (static assets) for Minimal StartPage at start.soholocal.nl.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "check": "wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "wrangler": "^4.152.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
