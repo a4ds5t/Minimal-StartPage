@@ -1,11 +1,15 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  // Assets-only Worker for Minimal StartPage. Serves the repository root
-  // (same layout as GitHub Pages). `.assetsignore` drops repo metadata from upload.
+  // Static site at start.soholocal.nl: worker routes / and /app; ASSETS serves the rest.
+  // `.assetsignore` drops repo docs and tooling from upload.
   "name": "minimal-startpage",
+  "main": "worker.js",
   "compatibility_date": "2026-10-25",
   "assets": {
-    "directory": "./"
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none"
   },
   "routes": [
     {
