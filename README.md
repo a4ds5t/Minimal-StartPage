@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://drallas.github.io/Minimal-StartPage/"><strong>Open the start page</strong></a>
+  <a href="https://start.soholocal.nl/app"><strong>Open the start page</strong></a>
   &nbsp;·&nbsp;
   <a href="Installation.md"><strong>Install it on your computer</strong></a>
   &nbsp;·&nbsp;
@@ -84,7 +84,7 @@ Each option can still be changed on its own. When your choices match neither pag
 
 There are three ways to use it, from easiest to most control. You do not need to install anything for the first one.
 
-1. **Use the online version.** Open [the start page](https://drallas.github.io/Minimal-StartPage/), bookmark it and set it as your homepage. On a phone, in Safari, tap Share and then Add to Home Screen.
+1. **Use the online version.** Open [the start page](https://start.soholocal.nl/app), bookmark it and set it as your homepage. On a phone, in Safari, tap Share and then Add to Home Screen.
 
 2. **Install a copy on your computer.** The page then works offline; only searches and the AI links need an internet connection. Download the files, unzip them, open `index.html` and set it as your homepage. Step-by-step instructions for Windows and macOS are in [Installation.md](Installation.md).
 
@@ -139,7 +139,7 @@ Short notes, one topic each:
 
 ## Credits
 
-Inspired by [Nimplex/Minimal-StartPage](https://github.com/Nimplex/Minimal-StartPage) by Przemysław Szafraniec. This project is a full rebuild from scratch; it shares the idea of a minimal start page, not its code.
+Made by [a4ds5t](https://github.com/a4ds5t).
 
 The wallpapers are photos from [Unsplash](https://unsplash.com), used under the Unsplash License:
 
