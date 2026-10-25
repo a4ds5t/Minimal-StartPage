@@ -1,17 +1,28 @@
-# Repo files that are not part of the static site.
-# GitHub Pages still serves the repository root; Workers must not upload these.
+# Only browser runtime assets for start.soholocal.nl (landing + app + shared static).
+# Everything else stays in git only — not uploaded to the Worker.
+
 node_modules
 .git
 .github
 .wrangler
 .vscode
+.cursor
 .dev.vars
 .DS_Store
+
 package.json
 package-lock.json
 wrangler.jsonc
-README.md
-Installation.md
+worker.js
+
 .gitignore
 .assetsignore
+
+**/*.md
+LICENSE
+
+docs
+docs/**
+
 tests
+tests/**

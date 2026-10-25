@@ -9,12 +9,12 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="canonical" href="https://start.soholocal.nl/homepage.html">
+  <link rel="canonical" href="https://start.soholocal.nl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Minimal Start Page">
   <meta property="og:title" content="Minimal-StartPage: a quiet start page that stays out of your way">
   <meta property="og:description" content="A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.">
-  <meta property="og:url" content="https://start.soholocal.nl/homepage.html">
+  <meta property="og:url" content="https://start.soholocal.nl/">
   <meta property="og:image" content="https://start.soholocal.nl/assets/screenshot_light.webp">
   <meta property="og:image:alt" content="Minimal Start Page in light theme with search bar and soft wallpaper.">
   <meta name="twitter:card" content="summary_large_image">
@@ -85,7 +85,11 @@
       padding: 8px 12px; border-radius: 999px;
     }
     nav a:hover { color: var(--ink); background: var(--soft); }
-    nav a.nav-cta { color: var(--ink); background: var(--soft); }
+    nav a.nav-cta {
+      color: var(--accent-ink); background: var(--accent); border: 1px solid var(--accent);
+      font-weight: 550;
+    }
+    nav a.nav-cta:hover { color: var(--accent-ink); background: var(--accent); box-shadow: var(--shadow); }
     .lang-select {
       font: inherit; font-size: 14px; color: var(--muted); background: transparent;
       border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; margin-left: 6px; cursor: pointer;
@@ -220,7 +224,7 @@
 <body>
   <header class="top">
     <div class="wrap">
-      <a class="brand" href="homepage.html">
+      <a class="brand" href="/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor"/><circle cx="12" cy="12" r="3.2" style="fill:var(--bg)"/></svg>
         Minimal-StartPage
       </a>
@@ -228,7 +232,7 @@
         <a data-i18n="install" href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/Installation.md">Install</a>
         <a data-i18n="screenshots" href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/docs/Screenshots.md">Screenshots</a>
         <a href="https://github.com/a4ds5t/Minimal-StartPage">GitHub</a>
-        <a class="nav-cta" data-i18n="open" href="index.html">Open it</a>
+        <a class="nav-cta" data-i18n="open" href="/app">Open it</a>
         <select id="lang-select" class="lang-select">
           <option value="auto" data-i18n="auto">Auto</option>
           <option value="nl">Nederlands</option>
@@ -249,7 +253,7 @@
         <h1 data-i18n="h1">A start page that stays out of your way.</h1>
         <p class="lead" data-i18n="lead">Search, a clock, and optional weather, links and AI shortcuts. Everything beyond the search is switched on by you, and nothing leaves the page unless you ask it to.</p>
         <div class="cta">
-          <a class="btn primary" href="index.html"><span data-i18n="cta_open">Open the start page</span>
+          <a class="btn primary" href="/app"><span data-i18n="cta_open">Open the start page</span>
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
           <a class="btn" href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/Installation.md" data-i18n="cta_install">Install a copy</a>
@@ -342,7 +346,7 @@
           </ul>
           <p class="links" data-i18n-html="links_html"><a href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/docs/Screenshots.md">More screenshots</a> · <a href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/docs/FAQ.md">Questions and answers</a></p>
         </div>
-        <div class="frame"><img src="docs/images/manage-data.png" width="640" height="420" data-i18n-alt="privacy_alt" alt="The Manage data panel, with links, time zones, AI shortcuts and weather places"></div>
+        <div class="frame"><img src="assets/manage-data.png" width="640" height="420" data-i18n-alt="privacy_alt" alt="The Manage data panel, with links, time zones, AI shortcuts and weather places"></div>
       </div>
     </section>
 
@@ -378,7 +382,7 @@
         <h2 data-i18n="final_h2">Keep the page quiet. Make it yours.</h2>
         <p class="intro" data-i18n="final_p">Free, open source and yours to change.</p>
         <div class="cta">
-          <a class="btn primary" href="index.html" data-i18n="cta_open">Open the start page</a>
+          <a class="btn primary" href="/app" data-i18n="cta_open">Open the start page</a>
           <a class="btn" href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/Installation.md" data-i18n="cta_install">Install a copy</a>
         </div>
       </div>
