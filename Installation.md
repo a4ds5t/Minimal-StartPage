@@ -4,7 +4,7 @@ Minimal-StartPage is a single web page. There is nothing to build, compile or in
 
 ## Option 1: use the online version (easiest)
 
-1. Open [https://drallas.github.io/Minimal-StartPage/](https://drallas.github.io/Minimal-StartPage/).
+1. Open [https://start.soholocal.nl/app](https://start.soholocal.nl/app).
 2. Make it your homepage. Look for **Homepage** or **Home** in your browser's settings and enter that address.
 3. On a phone, open the page in Safari (iPhone) or Chrome (Android) and add it to your home screen:
    - **iPhone:** tap the Share button, then **Add to Home Screen**.
