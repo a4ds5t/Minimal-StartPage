@@ -6,9 +6,9 @@
   <title>Minimal-StartPage: a quiet start page that stays out of your way</title>
   <meta name="description" content="A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.">
   <meta name="theme-color" content="#f5f3ee">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="canonical" href="https://start.soholocal.nl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Minimal Start Page">
@@ -18,6 +18,9 @@
   <meta property="og:image" content="https://start.soholocal.nl/assets/screenshot_light.webp">
   <meta property="og:image:alt" content="Minimal Start Page in light theme with search bar and soft wallpaper.">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Minimal-StartPage: a quiet start page that stays out of your way">
+  <meta name="twitter:description" content="A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.">
+  <meta name="twitter:image" content="https://start.soholocal.nl/assets/screenshot_light.webp">
   <style>
     :root {
       --bg: #f5f3ee;
@@ -97,7 +100,7 @@
     .lang-select:hover { color: var(--ink); }
 
     /* Hero */
-    .hero { padding: 72px 0 64px; text-align: center; position: relative; }
+    .hero { padding: 56px 0 48px; text-align: center; position: relative; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       font-size: 14px; color: var(--muted);
@@ -110,7 +113,7 @@
       line-height: 1.04; letter-spacing: -0.035em; font-weight: 700;
       max-width: 860px; margin: 0 auto 20px;
     }
-    .hero .lead { font-size: 19px; color: var(--muted); max-width: 600px; margin: 0 auto 32px; }
+    .hero .lead { font-size: 19px; color: var(--muted); max-width: 600px; margin: 0 auto 24px; }
     .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
@@ -123,8 +126,8 @@
     .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
     .stage {
-      margin: 64px auto 0; max-width: 980px; position: relative;
-      border-radius: 22px; padding: 28px;
+      margin: 40px auto 0; max-width: 980px; position: relative;
+      border-radius: 22px; padding: 22px;
       background: linear-gradient(160deg, var(--soft), var(--bg));
       border: 1px solid var(--line);
     }
@@ -140,11 +143,11 @@
     dialog#zoom img { width: 100%; height: auto; border-radius: 14px; display: block; }
 
     /* Sections */
-    section { padding: 88px 0; }
+    section { padding: 64px 0; }
     section.alt { background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .kicker { font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
     section h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; margin: 0 0 14px; max-width: 720px; }
-    .intro { color: var(--muted); font-size: 17px; margin: 0 0 40px; max-width: 640px; }
+    .intro { color: var(--muted); font-size: 17px; margin: 0 0 28px; max-width: 640px; }
     .intro.flush { margin: 0; }
 
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -170,7 +173,7 @@
     .tier.default p, .tier.default .name { color: var(--accent-ink); opacity: .75; }
     .tag { position: absolute; top: 22px; right: 22px; font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; opacity: .8; }
 
-    .wide { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .wide { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
     .frame { background: var(--soft); border-radius: 22px; padding: 28px; border: 1px solid var(--line); }
     .frame img { border-radius: 12px; box-shadow: var(--shadow); }
     .links { margin: 24px 0 0; font-size: 15px; }
@@ -195,7 +198,7 @@
     .steps strong { display: block; font-size: 17px; margin-bottom: 4px; }
     .steps p { margin: 0; color: var(--muted); font-size: 15px; }
 
-    .final { text-align: center; padding: 96px 0 88px; }
+    .final { text-align: center; padding: 72px 0 64px; }
     .final h2 { margin-left: auto; margin-right: auto; }
     .final .intro { margin-left: auto; margin-right: auto; margin-bottom: 32px; }
 
@@ -214,9 +217,9 @@
       .grid, .tiers, .steps, .shots { grid-template-columns: 1fr; }
       .tiers .tier:last-child { grid-column: auto; }
       nav a:not(.nav-cta) { display: none; }
-      .hero { padding: 48px 0 40px; }
-      .stage { padding: 14px; margin-top: 44px; }
-      section { padding: 64px 0; }
+      .hero { padding: 36px 0 32px; }
+      .stage { padding: 14px; margin-top: 32px; }
+      section { padding: 48px 0; }
       .backgrounds { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -656,16 +659,33 @@
     }
 
     const langSelect = document.getElementById('lang-select')
-    // The same choice as the start page: a language picked there or here, else the browser language.
+    const metaDescription = document.querySelector('meta[name="description"]')
+    const ogTitle = document.querySelector('meta[property="og:title"]')
+    const ogDescription = document.querySelector('meta[property="og:description"]')
+    const ogImageAlt = document.querySelector('meta[property="og:image:alt"]')
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]')
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]')
+    // Same rules as the app: saved `lang` wins; else browser (first two letters); unsupported codes → English.
     const savedLang = () => { try { return localStorage.getItem('lang') } catch { return null } }
-    const pickedLang = () => (LANGS.includes(savedLang()) ? savedLang() : (navigator.language || 'en').slice(0, 2).toLowerCase())
+    const browserLangCode = () => (navigator.language || 'en').slice(0, 2).toLowerCase()
+    const effectiveLang = () => {
+      const saved = savedLang()
+      if (LANGS.includes(saved)) return saved
+      const browser = browserLangCode()
+      return LANGS.includes(browser) ? browser : 'en'
+    }
 
     const applyLang = () => {
-      const lang = LANGS.includes(pickedLang()) ? pickedLang() : 'en'
+      const lang = effectiveLang()
       const t = text[lang]
       document.documentElement.lang = lang
       document.title = t.title
-      document.querySelector('meta[name="description"]').content = t.description
+      metaDescription.content = t.description
+      ogTitle.content = t.title
+      ogDescription.content = t.description
+      ogImageAlt.content = t.light_alt
+      twitterTitle.content = t.title
+      twitterDescription.content = t.description
       langSelect.setAttribute('aria-label', t.lang)
       document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t[el.dataset.i18n] })
       document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t[el.dataset.i18nHtml] })
