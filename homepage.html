@@ -28,6 +28,7 @@
       --ink: #1f1e1b;
       --muted: #67645c;
       --line: #e2dccf;
+      --line-strong: #b8aea0;
       --soft: #ebe7de;
       --accent: #1f1e1b;
       --accent-ink: #f5f3ee;
@@ -41,6 +42,7 @@
         --ink: #ecebe8;
         --muted: #9a9890;
         --line: #2a303a;
+        --line-strong: #4a5568;
         --soft: #20242b;
         --accent: #ecebe8;
         --accent-ink: #111317;
@@ -53,6 +55,7 @@
       --ink: #ecebe8;
       --muted: #9a9890;
       --line: #2a303a;
+      --line-strong: #4a5568;
       --soft: #20242b;
       --accent: #ecebe8;
       --accent-ink: #111317;
@@ -131,14 +134,47 @@
 
     .stage {
       margin: 40px auto 0; max-width: 980px; position: relative;
-      border-radius: 22px; padding: 22px;
-      background: linear-gradient(160deg, var(--soft), var(--bg));
-      border: 1px solid var(--line);
+      border-radius: 20px; padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow);
     }
-    .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
     .shots figure { margin: 0; text-align: left; }
+    .stage .shots img {
+      width: 100%; border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--line-strong) 60%, var(--line));
+      box-shadow: 0 4px 16px rgba(27, 35, 48, 0.07);
+    }
     .shots img { width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: var(--shadow); }
     figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; letter-spacing: 0.02em; }
+    .stage .shots figcaption {
+      font-size: 13px; font-weight: 650; color: var(--ink);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      margin-top: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .stage .shots figcaption::before {
+      content: "";
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+    .stage .shots figure:last-child figcaption::before {
+      background: var(--ink);
+    }
+    .stage .shots figure:last-child a.zoom {
+      position: relative;
+      display: block;
+    }
+    .stage .shots figure:last-child a.zoom::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: rgba(17, 24, 32, 0.14);
+      pointer-events: none;
+    }
     a.zoom { display: block; border-radius: 14px; cursor: zoom-in; transition: transform .2s ease, box-shadow .2s ease; }
     a.zoom:hover { transform: scale(1.025); box-shadow: var(--shadow); }
     a.zoom img { transition: none; }
