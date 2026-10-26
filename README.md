@@ -157,4 +157,4 @@ The gear icon is from [Feather](https://feathericons.com) (MIT).
 
 ## License
 
-Released under the [MIT License](LICENSE). Use, copy, modify and share it however you like. It comes without warranty, and the author is not liable for any damage.
+Released under the [PolyForm Noncommercial License 1.0.0](LICENSE) (SPDX: PolyForm-Noncommercial-1.0.0). Noncommercial use is allowed under those terms. Commercial use needs a separate paid license from the copyright holder. See [NOTICE](NOTICE). It comes without warranty, and the author is not liable for any damage.
