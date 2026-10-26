@@ -178,8 +178,10 @@
     .tag { position: absolute; top: 22px; right: 22px; font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; opacity: .8; }
 
     .wide { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    /* Let grid children shrink so a wide intrinsic image does not squeeze the copy column. */
+    .wide > * { min-width: 0; }
     .frame { background: var(--soft); border-radius: 22px; padding: 28px; border: 1px solid var(--line); }
-    .frame img { border-radius: 12px; box-shadow: var(--shadow); }
+    .frame img { width: 100%; max-width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow); }
     .links { margin: 24px 0 0; font-size: 15px; }
     .links a { color: var(--ink); font-weight: 550; text-underline-offset: 3px; }
     .pill-list { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -303,7 +305,7 @@
           <h2 data-i18n="search_h2">Pick your search engine right in the bar.</h2>
           <p class="intro flush" data-i18n="search_p">Each click on the icon moves to the next engine: DuckDuckGo, Kagi, Brave or Google. Your choice is remembered. Under Manage data you can also add up to five AI shortcuts, or your own address.</p>
         </div>
-        <div class="frame"><img src="assets/quickstart-search.png" width="376" height="64" data-i18n-alt="search_alt" alt="The search bar with the engine icon on the left"></div>
+        <div class="frame"><img src="assets/quickstart-search.png" width="480" height="106" data-i18n-alt="search_alt" alt="The search bar with the engine icon on the left"></div>
       </div>
     </section>
 
