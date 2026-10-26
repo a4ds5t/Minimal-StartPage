@@ -154,6 +154,26 @@ const emptyForecast = {
   const after = await page.evaluate(() => JSON.parse(localStorage.getItem('links') || '[]'));
   check(after.length === 2, 'an invalid file leaves the links unchanged');
 
+  console.log('Topbar language');
+  const LANG_VALUES = 'auto,nl,en,de,fr,es,zh';
+  check(
+    (await page.$eval('#top-lang', (sel) => [...sel.options].map((o) => o.value).join(','))) === LANG_VALUES,
+    'topbar lists the same languages as landing (auto + six locales)',
+  );
+  check(
+    (await page.$eval('#set-lang', (sel) => [...sel.options].map((o) => o.value).join(','))) === LANG_VALUES,
+    'settings language lists the full set',
+  );
+  await page.evaluate(() => { localStorage.clear(); localStorage.setItem('lang', 'nl'); });
+  await page.reload();
+  await page.waitForSelector('#top-lang');
+  check(await page.$eval('#top-lang', (el) => el.value === 'nl'), 'topbar language matches stored preference');
+  check(await page.$eval('#set-lang', (el) => el.value === 'nl'), 'settings language stays in sync on load');
+  await Promise.all([page.waitForNavigation(), page.selectOption('#top-lang', 'es')]);
+  await page.waitForSelector('#search');
+  check(await page.$eval('#settings-button', (el) => el.getAttribute('aria-label') === 'Ajustes'), 'changing language in the topbar updates UI strings');
+  check(await page.isVisible('.modes'), 'colour mode pill stays visible after language change');
+
   console.log('Windows');
   await page.keyboard.press('Escape');
   await page.waitForTimeout(200);

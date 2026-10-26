@@ -25,11 +25,11 @@ try {
 } catch {}
 
 const showEngine = () => {
+  const copy = text[pageLang] || text.en
   engineButton.innerHTML = engines[engine].icon
-  engineButton.title = `Search engine: ${engines[engine].name}. Click to change.`
+  engineButton.title = copy.engineLabel.replace('{name}', engines[engine].name)
   engineButton.setAttribute('aria-label', engineButton.title)
 }
-showEngine()
 
 engineButton.addEventListener('click', () => {
   engine = (engine + 1) % engines.length
@@ -101,6 +101,7 @@ const pageLang = (() => {
 const dateLocales = { en: 'en-GB', nl: 'nl-NL', de: 'de-DE', fr: 'fr-FR', es: 'es-ES', zh: 'zh-CN' }
 const weekWords = { en: ['Week', 'day', 'of'], nl: ['Week', 'dag', 'van'], de: ['Woche', 'Tag', 'von'], fr: ['Semaine', 'jour', 'sur'], es: ['Semana', 'día', 'de'], zh: ['第', '天，共', '天'] }
 const [weekWord, dayWord, ofWord] = weekWords[pageLang] || weekWords.en
+let clockClickHint = ''
 const updateClock = () => {
   const now = new Date()
   const full = clockMode === 'full'
@@ -126,7 +127,7 @@ const updateClock = () => {
     clockTime.textContent = time
   }
   clockTime.dateTime = now.toISOString()
-  clockTime.title = `${zone} (UTC${sign}${hh}:${mm})`
+  clockTime.title = clockClickHint ? `${clockClickHint} · ${zone} (UTC${sign}${hh}:${mm})` : `${zone} (UTC${sign}${hh}:${mm})`
   clockDate.textContent = date
   clockDate.hidden = !dateOn
   clockDate.title = `${weekWord} ${isoWeek(now)} · ${dayWord} ${dayOfYear(now)} ${ofWord} ${isLeap(now.getFullYear()) ? 366 : 365}`
@@ -167,6 +168,7 @@ clockTime.addEventListener('click', () => setClockMode(clockModes[(clockModes.in
 const weatherButton = document.getElementById('weather-button')
 const weatherDetail = document.getElementById('weather-detail')
 const settingsButton = document.getElementById('settings-button')
+const topLangSelect = document.getElementById('top-lang')
 const settings = document.getElementById('settings')
 // On a phone the slider is replaced by a button that steps through a few colours, so a tap is enough.
 const tintCycle = document.getElementById('tint-cycle')
@@ -431,6 +433,14 @@ const pageText = {
   es: { secPage: 'Página', presetMinimal: 'Mínimo', presetStandard: 'Estándar', presetCustom: 'Personal' },
   zh: { secPage: '页面', presetMinimal: '极简', presetStandard: '标准', presetCustom: '个性化' }
 }
+const topbarText = {
+  en: { colorMode: 'Color mode', themeAuto: 'System theme', themeDark: 'Dark theme', themeLight: 'Light theme', langLabel: 'Language', searchLabel: 'Search the web', searchFormTitle: 'Type a search and press Enter', engineLabel: 'Search engine: {name}. Click to change.', searchSubmit: 'Search', timeClick: 'Click to cycle through 24-hour, 12-hour and full time', askAiCaption: 'Ask AI' },
+  nl: { colorMode: 'Kleurmodus', themeAuto: 'Systeemthema', themeDark: 'Donker thema', themeLight: 'Licht thema', langLabel: 'Taal', searchLabel: 'Zoek op het web', searchFormTitle: 'Typ een zoekopdracht en druk op Enter', engineLabel: 'Zoekmachine: {name}. Klik om te wisselen.', searchSubmit: 'Zoeken', timeClick: 'Klik om te wisselen tussen 24 uur, 12 uur en volledige tijd', askAiCaption: 'Vraag AI' },
+  de: { colorMode: 'Farbmodus', themeAuto: 'Systemdesign', themeDark: 'Dunkles Design', themeLight: 'Helles Design', langLabel: 'Sprache', searchLabel: 'Im Web suchen', searchFormTitle: 'Suchbegriff eingeben und Enter drücken', engineLabel: 'Suchmaschine: {name}. Klicken zum Wechseln.', searchSubmit: 'Suchen', timeClick: 'Klicken, um zwischen 24-Stunden-, 12-Stunden- und Vollzeit zu wechseln', askAiCaption: 'KI fragen' },
+  fr: { colorMode: 'Mode couleur', themeAuto: 'Thème système', themeDark: 'Thème sombre', themeLight: 'Thème clair', langLabel: 'Langue', searchLabel: 'Rechercher sur le web', searchFormTitle: 'Saisissez une recherche et appuyez sur Entrée', engineLabel: 'Moteur de recherche : {name}. Cliquez pour changer.', searchSubmit: 'Rechercher', timeClick: 'Cliquez pour alterner entre 24 h, 12 h et l’heure complète', askAiCaption: 'Demander à l’IA' },
+  es: { colorMode: 'Modo de color', themeAuto: 'Tema del sistema', themeDark: 'Tema oscuro', themeLight: 'Tema claro', langLabel: 'Idioma', searchLabel: 'Buscar en la web', searchFormTitle: 'Escribe una búsqueda y pulsa Intro', engineLabel: 'Buscador: {name}. Haz clic para cambiar.', searchSubmit: 'Buscar', timeClick: 'Haz clic para alternar entre 24 horas, 12 horas y hora completa', askAiCaption: 'Preguntar a la IA' },
+  zh: { colorMode: '颜色模式', themeAuto: '跟随系统', themeDark: '深色主题', themeLight: '浅色主题', langLabel: '语言', searchLabel: '搜索网页', searchFormTitle: '输入搜索内容并按 Enter', engineLabel: '搜索引擎：{name}。点击切换。', searchSubmit: '搜索', timeClick: '点击可在 24 小时制、12 小时制和完整时间之间切换', askAiCaption: '询问 AI' },
+}
 const advancedText = {
   en: { advTitle: 'Advanced settings', advancedOpen: 'Advanced', advancedClosed: '← Back to basic settings' },
   nl: { advTitle: 'Geavanceerde instellingen', advancedOpen: 'Geavanceerd', advancedClosed: '← Terug naar basisinstellingen' },
@@ -439,7 +449,7 @@ const advancedText = {
   es: { advTitle: 'Ajustes avanzados', advancedOpen: 'Avanzado', advancedClosed: '← Volver a los ajustes básicos' },
   zh: { advTitle: '高级设置', advancedOpen: '高级', advancedClosed: '← 返回基本设置' }
 }
-for (const lang of Object.keys(text)) Object.assign(text[lang], linksText[lang], advancedText[lang], pageText[lang], bgTitleText[lang], tintText[lang], wallpaperText[lang], disclaimerText[lang], linkToggleText[lang], linksOwnText[lang], aiText[lang], manageText[lang], dataText[lang], tintCycleText[lang], quoteTitleText[lang], ipText[lang], sectionText[lang], forecastText[lang], { hourHeads: hourHeads[lang] }, zonesText[lang], { ipPrivacy: ipPrivacy[lang] })
+for (const lang of Object.keys(text)) Object.assign(text[lang], linksText[lang], advancedText[lang], pageText[lang], topbarText[lang], bgTitleText[lang], tintText[lang], wallpaperText[lang], disclaimerText[lang], linkToggleText[lang], linksOwnText[lang], aiText[lang], manageText[lang], dataText[lang], tintCycleText[lang], quoteTitleText[lang], ipText[lang], sectionText[lang], forecastText[lang], { hourHeads: hourHeads[lang] }, zonesText[lang], { ipPrivacy: ipPrivacy[lang] })
 const weatherWording = {
   en: { location: 'Location', locIp: 'My place via IP address', locCity: 'A city I choose', noSource: 'Choose a place', needPlace: 'The weather needs a place: choose your IP address or a city below.' },
   nl: { location: 'Locatie', locIp: 'Mijn plaats via IP-adres', locCity: 'Een stad die ik kies', noSource: 'Kies een plaats', needPlace: 'Het weer heeft een plaats nodig: kies hieronder je IP-adres of een stad.' },
@@ -976,6 +986,7 @@ const applySettingsText = () => {
   document.getElementById('links-window-title').textContent = t.linksTitle
   document.getElementById('links-window-close').setAttribute('aria-label', t.close)
   document.getElementById('links-manage').textContent = t.linksEdit
+  document.getElementById('ask-ai-caption').textContent = t.askAiCaption
   document.getElementById('ask-ai-caption').title = t.askAiTip
   document.getElementById('forecast-edit').textContent = t.placesEdit
   document.getElementById('zones-window-title').textContent = t.zonesTitle
@@ -1076,7 +1087,26 @@ const applySettingsText = () => {
   document.getElementById('export-data').textContent = t.exportData
   document.getElementById('import-data').textContent = t.importData
   document.getElementById('sec-lang').textContent = t.langSection
+  document.getElementById('lbl-set-lang').textContent = t.langSection
   document.getElementById('set-lang-auto').textContent = t.langAuto
+  document.getElementById('top-lang-auto').textContent = t.langAuto
+  if (topLangSelect) {
+    topLangSelect.setAttribute('aria-label', t.langLabel)
+    topLangSelect.title = t.langLabel
+  }
+  document.getElementById('modes-group').setAttribute('aria-label', t.colorMode)
+  modeButtons.forEach((button) => {
+    const key = { auto: 'themeAuto', dark: 'themeDark', light: 'themeLight' }[button.dataset.themeValue]
+    if (!key) return
+    button.title = t[key]
+    button.setAttribute('aria-label', t[key])
+  })
+  searchForm.title = t.searchFormTitle
+  document.querySelector('label[for="search"]').textContent = t.searchLabel
+  document.getElementById('go').title = t.searchSubmit
+  document.getElementById('go').setAttribute('aria-label', t.searchSubmit)
+  clockClickHint = t.timeClick
+  showEngine()
   document.getElementById('import-title').textContent = t.importTitle
   document.getElementById('import-body').textContent = t.importBody
   document.getElementById('import-merge').textContent = t.importMerge
@@ -1090,6 +1120,7 @@ const applySettingsText = () => {
   document.getElementById('forecast-close').setAttribute('aria-label', t.close)
   settingsButton.setAttribute('aria-label', t.open)
   settingsButton.title = t.open
+  syncLangSelects()
 }
 
 const syncSettings = () => {
@@ -1097,7 +1128,7 @@ const syncSettings = () => {
   settingsFields.locIp.checked = locationMode === 'ip'
   settingsFields.locCity.checked = locationMode === 'city'
   settingsFields.quote.checked = quoteOn
-  settingsFields.lang.value = localStorage.getItem('lang') || 'auto'
+  syncLangSelects()
   renderIp()
   settingsFields.zones.checked = zonesOn
   settingsFields.wallpaper.checked = wallpaperOn
@@ -1377,13 +1408,27 @@ const clearKeys = (keys) => {
   } catch {}
 }
 const personalKeys = ['links', 'askAiList', 'city', 'zones', 'location', 'weatherPlaces', 'personalState']
-settingsFields.lang.addEventListener('change', () => {
+const storedLang = () => {
+  try { return localStorage.getItem('lang') || 'auto' } catch { return 'auto' }
+}
+const syncLangSelects = (value) => {
+  const choice = value ?? storedLang()
+  settingsFields.lang.value = choice
+  if (topLangSelect) topLangSelect.value = choice
+}
+const applyLangPreference = (value) => {
   try {
-    if (settingsFields.lang.value === 'auto') localStorage.removeItem('lang')
-    else localStorage.setItem('lang', settingsFields.lang.value)
+    if (value === 'auto') localStorage.removeItem('lang')
+    else localStorage.setItem('lang', value)
   } catch {}
   location.reload()
-})
+}
+const onLangChange = (value) => {
+  if (value === storedLang()) return
+  applyLangPreference(value)
+}
+settingsFields.lang.addEventListener('change', () => onLangChange(settingsFields.lang.value))
+if (topLangSelect) topLangSelect.addEventListener('change', () => onLangChange(topLangSelect.value))
 settingsFields.resetSettings.addEventListener('click', () => {
   if (!confirm(t.resetSettingsConfirm)) return
   clearKeys(['personalState', 'lang', 'engine', 'theme', 'clockFormat', 'dateFormat', 'wallpaper', 'wallpaperEnabled', 'hue', 'weather', 'location', 'quote', 'ipInfo', 'timeZones', 'linksOn', 'linksOwn', 'wallpaperButton', 'tint', 'askai', 'searchNewTab', 'aiNewTab', 'dateNotation', 'showDate', 'preset'])
