@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Minimal-StartPage: a quiet start page that stays out of your way</title>
-  <meta name="description" content="A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.">
+  <title>Free minimal start page — search, clock, privacy | Minimal-StartPage</title>
+  <meta name="description" content="Free, noncommercial minimal start page with search, a clock, and optional weather and links. Privacy-first: no account, no tracking. Open in your browser.">
   <meta name="theme-color" content="#f5f3ee">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -12,14 +12,14 @@
   <link rel="canonical" href="https://start.soholocal.nl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Minimal Start Page">
-  <meta property="og:title" content="Minimal-StartPage: a quiet start page that stays out of your way">
-  <meta property="og:description" content="A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.">
+  <meta property="og:title" content="Free minimal start page — search, clock, privacy | Minimal-StartPage">
+  <meta property="og:description" content="Free, noncommercial minimal start page with search, a clock, and optional weather and links. Privacy-first: no account, no tracking. Open in your browser.">
   <meta property="og:url" content="https://start.soholocal.nl/">
   <meta property="og:image" content="https://start.soholocal.nl/assets/screenshot_light.webp">
   <meta property="og:image:alt" content="Minimal Start Page in light theme with search bar and soft wallpaper.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Minimal-StartPage: a quiet start page that stays out of your way">
-  <meta name="twitter:description" content="A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.">
+  <meta name="twitter:title" content="Free minimal start page — search, clock, privacy | Minimal-StartPage">
+  <meta name="twitter:description" content="Free, noncommercial minimal start page with search, a clock, and optional weather and links. Privacy-first: no account, no tracking. Open in your browser.">
   <meta name="twitter:image" content="https://start.soholocal.nl/assets/screenshot_light.webp">
   <style>
     :root {
@@ -258,7 +258,7 @@
     <div class="hero">
       <div class="wrap">
         <p class="eyebrow"><i></i><span data-i18n="eyebrow">No account, no tracking, no build step</span></p>
-        <h1 data-i18n="h1">A start page that stays out of your way.</h1>
+        <h1 data-i18n="h1">A free start page that stays out of your way.</h1>
         <p class="lead" data-i18n="lead">Search, a clock, and optional weather, links and AI shortcuts. Everything beyond the search is switched on by you, and nothing leaves the page unless you ask it to.</p>
         <div class="cta">
           <a class="btn primary" href="/app"><span data-i18n="cta_open">Open the start page</span>
@@ -410,11 +410,11 @@
     const LANGS = ['nl', 'en', 'de', 'fr', 'es', 'zh']
     const text = {
       en: {
-        title: "Minimal-StartPage: a quiet start page that stays out of your way",
-        description: "A minimal start page with search, a clock and optional weather, links and AI shortcuts. Nothing leaves the page unless you switch it on.",
+        title: "Free minimal start page — search, clock, privacy | Minimal-StartPage",
+        description: "Free, noncommercial minimal start page with search, a clock, and optional weather and links. Privacy-first: no account, no tracking. Open in your browser.",
         install: "Install", screenshots: "Screenshots", open: "Open it", auto: "Auto", lang: "Language",
         eyebrow: "No account, no tracking, no build step",
-        h1: "A start page that stays out of your way.",
+        h1: "A free start page that stays out of your way.",
         lead: "Search, a clock, and optional weather, links and AI shortcuts. Everything beyond the search is switched on by you, and nothing leaves the page unless you ask it to.",
         cta_open: "Open the start page", cta_install: "Install a copy",
         light_alt: "The start page in the light theme, with the clock and the search bar in the middle", light_cap: "Light",
@@ -452,11 +452,11 @@
         footer_links: '<a href="https://github.com/a4ds5t/Minimal-StartPage">Source on GitHub</a> · <a href="https://github.com/a4ds5t/Minimal-StartPage/blob/main/docs/changelog/README.md">Changelog</a>'
       },
       nl: {
-        title: "Minimal-StartPage: een rustige startpagina die je met rust laat",
-        description: "Een minimale startpagina met zoeken, een klok en optioneel weer, links en AI-snelkoppelingen. Niets verlaat de pagina tenzij je dat aanzet.",
+        title: "Gratis minimale startpagina — zoeken, klok, privacy | Minimal-StartPage",
+        description: "Gratis, niet-commerciële minimale startpagina met zoeken, een klok en optioneel weer en links. Privacy eerst: geen account, geen tracking. Open in je browser.",
         install: "Installeren", screenshots: "Screenshots", open: "Openen", auto: "Automatisch", lang: "Taal",
         eyebrow: "Geen account, geen tracking, geen buildstap",
-        h1: "Een startpagina die je met rust laat.",
+        h1: "Een gratis startpagina die je met rust laat.",
         lead: "Zoeken, een klok, en optioneel weer, links en AI-snelkoppelingen. Alles naast het zoeken zet jij zelf aan, en niets verlaat de pagina tenzij jij dat vraagt.",
         cta_open: "Open de startpagina", cta_install: "Installeer een eigen kopie",
         light_alt: "De startpagina in het lichte thema, met de klok en de zoekbalk in het midden", light_cap: "Licht",
@@ -673,9 +673,22 @@
     // Same rules as the app: saved `lang` wins; else browser (first two letters); unsupported codes → English.
     const savedLang = () => { try { return localStorage.getItem('lang') } catch { return null } }
     const browserLangCode = () => (navigator.language || 'en').slice(0, 2).toLowerCase()
+    const pathLang = () => {
+      const p = (location.pathname || '/').replace(/\/$/, '') || '/'
+      if (p === '/nl') return 'nl'
+      return null
+    }
+    const queryLang = () => {
+      const q = new URLSearchParams(location.search).get('lang')
+      return LANGS.includes(q) ? q : null
+    }
     const effectiveLang = () => {
       const saved = savedLang()
       if (LANGS.includes(saved)) return saved
+      const fromPath = pathLang()
+      if (fromPath) return fromPath
+      const fromQuery = queryLang()
+      if (fromQuery) return fromQuery
       const browser = browserLangCode()
       return LANGS.includes(browser) ? browser : 'en'
     }
