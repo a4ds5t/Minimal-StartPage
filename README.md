@@ -52,7 +52,7 @@ Everything is optional. The settings start with a choice of page:
 
 Each option can still be changed on its own. When your choices match neither page, the page shows **Personal**. A page never switches weather or your IP address on, since they send data.
 
-- **Search.** Type a query and press Enter, or click the magnifier. It opens in the same tab; under **Advanced** you can choose a new tab instead. The icon on the left shows the search engine; click it to switch between DuckDuckGo (the default), Kagi, Brave and Google. Your choice is remembered.
+- **Search.** Type a query and press Enter, or click the magnifier. It opens in the same tab; under **Advanced** you can choose a new tab instead. The icon on the left shows the search engine (separated from the field by a thin vertical rail, not a bordered chip); click it to switch between DuckDuckGo (the default), Kagi, Brave and Google. Your choice is remembered.
 
 - **Clock.** The time sits above the search bar, with the date underneath. Click the time to cycle through 24-hour, 12-hour (AM/PM) and full time with seconds, or choose the format under **Advanced**. The colons stay still. Hover over the time to see your time zone and its UTC offset.
 
