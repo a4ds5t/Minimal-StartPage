@@ -168,7 +168,9 @@ clockTime.addEventListener('click', () => setClockMode(clockModes[(clockModes.in
 const weatherButton = document.getElementById('weather-button')
 const weatherDetail = document.getElementById('weather-detail')
 const settingsButton = document.getElementById('settings-button')
-const topLangSelect = document.getElementById('top-lang')
+const topLangTrigger = document.getElementById('top-lang-trigger')
+const topLangMenu = document.getElementById('top-lang-menu')
+const topLangItems = topLangMenu ? [...topLangMenu.querySelectorAll('[data-lang-value]')] : []
 const settings = document.getElementById('settings')
 // On a phone the slider is replaced by a button that steps through a few colours, so a tap is enough.
 const tintCycle = document.getElementById('tint-cycle')
@@ -1090,10 +1092,11 @@ const applySettingsText = () => {
   document.getElementById('lbl-set-lang').textContent = t.langSection
   document.getElementById('set-lang-auto').textContent = t.langAuto
   document.getElementById('top-lang-auto').textContent = t.langAuto
-  if (topLangSelect) {
-    topLangSelect.setAttribute('aria-label', t.langLabel)
-    topLangSelect.title = t.langLabel
+  if (topLangTrigger) {
+    topLangTrigger.setAttribute('aria-label', t.langLabel)
+    topLangTrigger.title = t.langLabel
   }
+  if (topLangMenu) topLangMenu.setAttribute('aria-label', t.langLabel)
   document.getElementById('modes-group').setAttribute('aria-label', t.colorMode)
   modeButtons.forEach((button) => {
     const key = { auto: 'themeAuto', dark: 'themeDark', light: 'themeLight' }[button.dataset.themeValue]
@@ -1413,9 +1416,18 @@ const storedLang = () => {
 }
 const syncLangSelects = (value) => {
   const choice = value ?? storedLang()
-  settingsFields.lang.value = choice
-  if (topLangSelect) topLangSelect.value = choice
+  if (settingsFields.lang) settingsFields.lang.value = choice
+  if (!topLangMenu) return
+  topLangMenu.querySelectorAll('[data-lang-value]').forEach((item) => {
+    item.setAttribute('aria-checked', String(item.dataset.langValue === choice))
+  })
 }
+const setLangMenuOpen = (open) => {
+  if (!topLangMenu || !topLangTrigger) return
+  topLangMenu.hidden = !open
+  topLangTrigger.setAttribute('aria-expanded', String(open))
+}
+const closeLangMenu = () => setLangMenuOpen(false)
 const applyLangPreference = (value) => {
   try {
     if (value === 'auto') localStorage.removeItem('lang')
@@ -1428,7 +1440,28 @@ const onLangChange = (value) => {
   applyLangPreference(value)
 }
 settingsFields.lang.addEventListener('change', () => onLangChange(settingsFields.lang.value))
-if (topLangSelect) topLangSelect.addEventListener('change', () => onLangChange(topLangSelect.value))
+if (topLangTrigger && topLangMenu) {
+  topLangTrigger.addEventListener('click', (e) => {
+    e.stopPropagation()
+    setLangMenuOpen(topLangMenu.hidden)
+  })
+  topLangItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      closeLangMenu()
+      onLangChange(item.dataset.langValue)
+    })
+  })
+  document.addEventListener('click', (e) => {
+    if (topLangMenu.hidden) return
+    if (e.target.closest('.lang-anchor')) return
+    closeLangMenu()
+  })
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || topLangMenu.hidden) return
+    closeLangMenu()
+    topLangTrigger.focus()
+  })
+}
 settingsFields.resetSettings.addEventListener('click', () => {
   if (!confirm(t.resetSettingsConfirm)) return
   clearKeys(['personalState', 'lang', 'engine', 'theme', 'clockFormat', 'dateFormat', 'wallpaper', 'wallpaperEnabled', 'hue', 'weather', 'location', 'quote', 'ipInfo', 'timeZones', 'linksOn', 'linksOwn', 'wallpaperButton', 'tint', 'askai', 'searchNewTab', 'aiNewTab', 'dateNotation', 'showDate', 'preset'])
@@ -2236,6 +2269,7 @@ aiForm.addEventListener('submit', (e) => {
 renderAskAi()
 root.toggleAttribute('data-quote-off', !quoteOn)
 applySettingsText()
+syncLangSelects()
 updateWeatherHint()
 renderIp()
 if (weatherOn) weatherButton.textContent = t.loading
