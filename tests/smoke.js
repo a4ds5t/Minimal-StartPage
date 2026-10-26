@@ -155,6 +155,15 @@ const emptyForecast = {
   check(after.length === 2, 'an invalid file leaves the links unchanged');
 
   console.log('Topbar language');
+  const LANG_VALUES = 'auto,nl,en,de,fr,es,zh';
+  check(
+    (await page.$eval('#top-lang', (sel) => [...sel.options].map((o) => o.value).join(','))) === LANG_VALUES,
+    'topbar lists the same languages as landing (auto + six locales)',
+  );
+  check(
+    (await page.$eval('#set-lang', (sel) => [...sel.options].map((o) => o.value).join(','))) === LANG_VALUES,
+    'settings language lists the full set',
+  );
   await page.evaluate(() => { localStorage.clear(); localStorage.setItem('lang', 'nl'); });
   await page.reload();
   await page.waitForSelector('#top-lang');
