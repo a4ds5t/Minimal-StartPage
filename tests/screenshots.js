@@ -86,7 +86,6 @@ const exampleLinks = [
   await page.evaluate((id) => {
     document.getElementById(id)?.remove();
     const form = document.getElementById('searchform');
-    const parent = form.parentElement;
     const frame = document.createElement('div');
     frame.id = id;
     Object.assign(frame.style, {
@@ -107,9 +106,13 @@ const exampleLinks = [
       boxShadow: '0 1px 2px rgba(31, 30, 27, 0.06), 0 18px 40px -18px rgba(31, 30, 27, 0.25)',
       overflow: 'hidden',
     });
-    parent.insertBefore(frame, form);
+    // Must live outside #main: its translateY() turns fixed into a transformed containing block
+    // and shifts the frame above the viewport, clipping the search bar in the PNG.
+    document.body.appendChild(frame);
     barWrap.appendChild(form);
     frame.appendChild(barWrap);
+    const pageRoot = document.getElementById('container');
+    if (pageRoot) pageRoot.style.visibility = 'hidden';
   }, captureId);
   await page.waitForTimeout(50);
   await page.locator(`#${captureId}`).screenshot({ path: quickstartPath });
