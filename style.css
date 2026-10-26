@@ -555,7 +555,8 @@ html[data-wallpaper-on] footer {
 }
 
 html[data-wallpaper-on] .topbar .icon-link,
-html[data-wallpaper-on] .modes button {
+html[data-wallpaper-on] .modes button,
+html[data-wallpaper-on] .topbar-lang-select {
   color: var(--color-fg-1);
 }
 
@@ -959,7 +960,31 @@ img.ai-icon {
 .topright {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+}
+
+.topbar-lang-select {
+  height: 28px;
+  max-width: 7.5rem;
+  padding: 0 8px;
+  margin: 0;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--color-fg-2);
+  background: color-mix(in srgb, var(--color-field) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(27, 35, 48, 0.06);
+  cursor: pointer;
+  transition: color .2s ease-in-out;
+}
+
+.topbar-lang-select:hover,
+.topbar-lang-select:focus-visible {
+  color: var(--color-fg-1);
 }
 
 .settings-button {
