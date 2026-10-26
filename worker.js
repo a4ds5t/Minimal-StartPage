@@ -2,6 +2,8 @@
  * Route start.soholocal.nl: / = landing, /app = startpage app, 301 legacy paths.
  * Static files are served via the ASSETS binding; repo docs are not uploaded.
  */
+import { applyLandingSeo, landingLocaleFromRequest } from "./landing-seo.js";
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -16,8 +18,25 @@ export default {
       return Response.redirect(new URL("/app", url.origin).href, 301);
     }
 
-    if (path === "/" || path === "") {
-      return serveAsset(env, request, "/homepage.html");
+    if (path === "/nl/") {
+      return Response.redirect(new URL("/nl", url.origin).href, 301);
+    }
+
+    if (path === "/" || path === "" || path === "/nl") {
+      const langQuery = url.searchParams.get("lang");
+      if ((path === "/" || path === "") && langQuery === "nl") {
+        return Response.redirect(new URL("/nl", url.origin).href, 301);
+      }
+      if ((path === "/" || path === "") && langQuery === "en") {
+        const clean = new URL(url);
+        clean.searchParams.delete("lang");
+        if (clean.search !== url.search) {
+          return Response.redirect(clean.href, 301);
+        }
+      }
+
+      const locale = landingLocaleFromRequest(path, url);
+      return serveHomepage(env, request, locale ?? "en");
     }
 
     if (path === "/app") {
@@ -46,6 +65,18 @@ function isBlockedPath(path) {
     return true;
   }
   return false;
+}
+
+async function serveHomepage(env, request, locale) {
+  const response = await serveAsset(env, request, "/homepage.html");
+  if (!response.ok) return response;
+
+  const html = await response.text();
+  const body = applyLandingSeo(html, locale);
+  const headers = new Headers(response.headers);
+  headers.set("content-type", "text/html; charset=utf-8");
+  headers.set("cache-control", headers.get("cache-control") || "public, max-age=0, must-revalidate");
+  return new Response(body, { status: response.status, headers });
 }
 
 async function serveAsset(env, request, assetPath) {

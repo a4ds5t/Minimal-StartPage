@@ -6,7 +6,8 @@
   "description": "Cloudflare Worker (static assets) for Minimal StartPage at start.soholocal.nl.",
   "scripts": {
     "dev": "wrangler dev",
-    "check": "wrangler deploy --dry-run"
+    "check": "wrangler deploy --dry-run",
+    "test:seo": "node --test landing-seo.test.js"
   },
   "devDependencies": {
     "wrangler": "^4.152.0"

@@ -21,3 +21,5 @@ jobs:
           npm install --no-audit --no-fund --legacy-peer-deps html-validate@10.17.0
       - name: Validate index.html and homepage.html
         run: "$RUNNER_TEMP/validator/node_modules/.bin/html-validate index.html homepage.html"
+      - name: Landing SEO unit tests
+        run: npm run test:seo
