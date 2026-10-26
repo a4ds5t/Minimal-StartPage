@@ -156,20 +156,40 @@ const emptyForecast = {
 
   console.log('Topbar language');
   const LANG_VALUES = 'auto,nl,en,de,fr,es,zh';
+  check(await page.$('#top-lang-trigger'), 'topbar language control is a globe trigger');
   check(
-    (await page.$eval('#top-lang', (sel) => [...sel.options].map((o) => o.value).join(','))) === LANG_VALUES,
-    'topbar lists the same languages as landing (auto + six locales)',
+    (await page.$eval('#top-lang-trigger', (el) => el.getAttribute('aria-haspopup') === 'menu' && !!el.getAttribute('aria-label'))),
+    'language trigger exposes menu popup and aria-label',
+  );
+  check(
+    (await page.$eval('#top-lang-menu', (menu) => [...menu.querySelectorAll('[data-lang-value]')].map((b) => b.dataset.langValue).join(','))) === LANG_VALUES,
+    'topbar menu lists the same languages as landing (auto + six locales)',
   );
   check(
     (await page.$eval('#set-lang', (sel) => [...sel.options].map((o) => o.value).join(','))) === LANG_VALUES,
     'settings language lists the full set',
   );
+  await page.click('#top-lang-trigger');
+  check(
+    (await page.$eval('#top-lang-trigger', (el) => el.getAttribute('aria-expanded') === 'true')) && !(await page.$eval('#top-lang-menu', (el) => el.hidden)),
+    'language menu opens from the globe trigger',
+  );
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(100);
+  check(
+    (await page.$eval('#top-lang-trigger', (el) => el.getAttribute('aria-expanded') === 'false')) && (await page.$eval('#top-lang-menu', (el) => el.hidden)),
+    'Escape closes the language menu',
+  );
   await page.evaluate(() => { localStorage.clear(); localStorage.setItem('lang', 'nl'); });
   await page.reload();
-  await page.waitForSelector('#top-lang');
-  check(await page.$eval('#top-lang', (el) => el.value === 'nl'), 'topbar language matches stored preference');
+  await page.waitForSelector('#top-lang-trigger');
+  check(
+    await page.$eval('#top-lang-menu [data-lang-value="nl"]', (el) => el.getAttribute('aria-checked') === 'true'),
+    'topbar language menu marks stored preference',
+  );
   check(await page.$eval('#set-lang', (el) => el.value === 'nl'), 'settings language stays in sync on load');
-  await Promise.all([page.waitForNavigation(), page.selectOption('#top-lang', 'es')]);
+  await page.click('#top-lang-trigger');
+  await Promise.all([page.waitForNavigation(), page.click('#top-lang-menu [data-lang-value="es"]')]);
   await page.waitForSelector('#search');
   check(await page.$eval('#settings-button', (el) => el.getAttribute('aria-label') === 'Ajustes'), 'changing language in the topbar updates UI strings');
   check(await page.isVisible('.modes'), 'colour mode pill stays visible after language change');
