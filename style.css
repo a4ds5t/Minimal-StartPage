@@ -224,26 +224,36 @@ button {
   border-color: var(--color-border-hover);
 }
 
+/* Engine toggle (variant D — rail): icon + vertical divider, no chip box; hit area matches #go. */
 #engine {
   position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 28px;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
   color: var(--color-fg-2);
-  transition: color .2s ease-in-out, border-color .2s ease-in-out;
+  border-radius: 12px 0 0 12px;
+  transition: color .2s ease-in-out;
+}
+
+#engine::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 28px;
+  background: var(--color-border);
+  pointer-events: none;
 }
 
 #engine:hover,
 #engine:focus-visible {
   color: var(--color-fg-1);
-  border-color: var(--color-border-hover);
 }
 
 #engine svg {
