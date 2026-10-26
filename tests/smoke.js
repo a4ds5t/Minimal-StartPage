@@ -4,10 +4,49 @@
 
 const { chromium } = require('playwright');
 const fs = require('fs');
+const http = require('http');
 const os = require('os');
 const path = require('path');
 
-const PAGE = 'file://' + path.resolve(__dirname, '..', 'index.html');
+const ROOT = path.resolve(__dirname, '..');
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
+  '.ttf': 'font/ttf',
+  '.woff2': 'font/woff2',
+};
+
+const startStaticServer = () => new Promise((resolve) => {
+  const server = http.createServer((req, res) => {
+    let reqPath = decodeURIComponent((req.url || '/').split('?')[0]);
+    if (reqPath === '/') reqPath = '/index.html';
+    const filePath = path.join(ROOT, reqPath.replace(/^\//, ''));
+    if (!filePath.startsWith(ROOT)) {
+      res.writeHead(403);
+      res.end();
+      return;
+    }
+    fs.readFile(filePath, (err, body) => {
+      if (err) {
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+      const type = MIME[path.extname(filePath)] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': type });
+      res.end(body);
+    });
+  });
+  server.listen(0, '127.0.0.1', () => resolve(server));
+});
+
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'startpage-'));
 
 let passed = 0;
@@ -25,6 +64,8 @@ const emptyForecast = {
 };
 
 (async () => {
+  const server = await startStaticServer();
+  const PAGE = `http://127.0.0.1:${server.address().port}/index.html`;
   const executablePath = process.env.CHROMIUM_PATH || undefined;
   const browser = await chromium.launch({ executablePath });
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'en-US', acceptDownloads: true });
@@ -155,6 +196,10 @@ const emptyForecast = {
   check(after.length === 2, 'an invalid file leaves the links unchanged');
 
   console.log('Topbar language');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(200);
+  if (await isOpen('#settings')) await page.click('#settings-close');
+  if (await isOpen('#manage')) await page.evaluate(() => { document.getElementById('manage').hidden = true; });
   const LANG_VALUES = 'auto,nl,en,de,fr,es,zh';
   check(await page.$('#top-lang-trigger'), 'topbar language control is a globe-only trigger');
   check(
@@ -194,6 +239,41 @@ const emptyForecast = {
   check(await page.$eval('#settings-button', (el) => el.getAttribute('aria-label') === 'Ajustes'), 'changing language in the topbar updates UI strings');
   check(await page.isVisible('.modes'), 'colour mode pill stays visible after language change');
 
+  console.log('Compact theme trigger (≤430px)');
+  await page.setViewportSize({ width: 390, height: 844 });
+  check(
+    (await page.$eval('#modes-group', (el) => getComputedStyle(el).display === 'none'))
+      && (await page.$eval('#top-theme-trigger', (el) => getComputedStyle(el).display === 'grid')),
+    'narrow viewport hides the pill and shows the compact theme trigger',
+  );
+  await page.evaluate(() => { const h = document.getElementById('first-hint'); if (h) h.hidden = true; });
+  await page.click('#top-theme-trigger');
+  check(
+    (await page.$eval('#top-theme-trigger', (el) => el.getAttribute('aria-expanded') === 'true'))
+      && !(await page.$eval('#top-theme-menu', (el) => el.hidden)),
+    'compact theme trigger opens the floating menu',
+  );
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(100);
+  check(
+    (await page.$eval('#top-theme-trigger', (el) => el.getAttribute('aria-expanded') === 'false'))
+      && (await page.$eval('#top-theme-menu', (el) => el.hidden)),
+    'Escape closes the theme menu',
+  );
+  await page.click('#top-theme-trigger');
+  await page.click('#top-theme-menu [data-theme-value="dark"]');
+  check(
+    (await page.evaluate(() => document.documentElement.dataset.theme === 'dark'))
+      && (await page.$eval('#top-theme-menu [data-theme-value="dark"]', (el) => el.getAttribute('aria-checked') === 'true')),
+    'theme menu applies dark mode and marks the active item',
+  );
+  await page.setViewportSize({ width: 1280, height: 800 });
+  check(
+    (await page.$eval('#modes-group', (el) => getComputedStyle(el).display !== 'none'))
+      && (await page.$eval('#top-theme-trigger', (el) => getComputedStyle(el).display === 'none')),
+    'wide viewport restores the three-icon pill',
+  );
+
   console.log('Windows');
   await page.keyboard.press('Escape');
   await page.waitForTimeout(200);
@@ -205,6 +285,7 @@ const emptyForecast = {
   check(errors.length === 0, 'no page errors during the run' + (errors.length ? ': ' + errors.join('; ') : ''));
 
   await browser.close();
+  server.close();
   fs.rmSync(TMP, { recursive: true, force: true });
   console.log(`\n${passed} passed, ${failed} failed`);
   process.exit(failed ? 1 : 0);

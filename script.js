@@ -7,7 +7,10 @@ const searchBox = document.getElementById('search')
 const engineButton = document.getElementById('engine')
 const clockTime = document.getElementById('time')
 const clockDate = document.getElementById('date')
-const modeButtons = document.querySelectorAll('[data-theme-value]')
+const modeButtons = document.querySelectorAll('#modes-group [data-theme-value]')
+const topThemeTrigger = document.getElementById('top-theme-trigger')
+const topThemeMenu = document.getElementById('top-theme-menu')
+const topThemeItems = topThemeMenu ? [...topThemeMenu.querySelectorAll('[data-theme-value]')] : []
 
 
 const engines = [
@@ -436,12 +439,12 @@ const pageText = {
   zh: { secPage: '页面', presetMinimal: '极简', presetStandard: '标准', presetCustom: '个性化' }
 }
 const topbarText = {
-  en: { colorMode: 'Color mode', themeAuto: 'System theme', themeDark: 'Dark theme', themeLight: 'Light theme', langLabel: 'Language', searchLabel: 'Search the web', searchFormTitle: 'Type a search and press Enter', engineLabel: 'Search engine: {name}. Click to change.', searchSubmit: 'Search', timeClick: 'Click to cycle through 24-hour, 12-hour and full time', askAiCaption: 'Ask AI' },
-  nl: { colorMode: 'Kleurmodus', themeAuto: 'Systeemthema', themeDark: 'Donker thema', themeLight: 'Licht thema', langLabel: 'Taal', searchLabel: 'Zoek op het web', searchFormTitle: 'Typ een zoekopdracht en druk op Enter', engineLabel: 'Zoekmachine: {name}. Klik om te wisselen.', searchSubmit: 'Zoeken', timeClick: 'Klik om te wisselen tussen 24 uur, 12 uur en volledige tijd', askAiCaption: 'Vraag AI' },
-  de: { colorMode: 'Farbmodus', themeAuto: 'Systemdesign', themeDark: 'Dunkles Design', themeLight: 'Helles Design', langLabel: 'Sprache', searchLabel: 'Im Web suchen', searchFormTitle: 'Suchbegriff eingeben und Enter drücken', engineLabel: 'Suchmaschine: {name}. Klicken zum Wechseln.', searchSubmit: 'Suchen', timeClick: 'Klicken, um zwischen 24-Stunden-, 12-Stunden- und Vollzeit zu wechseln', askAiCaption: 'KI fragen' },
-  fr: { colorMode: 'Mode couleur', themeAuto: 'Thème système', themeDark: 'Thème sombre', themeLight: 'Thème clair', langLabel: 'Langue', searchLabel: 'Rechercher sur le web', searchFormTitle: 'Saisissez une recherche et appuyez sur Entrée', engineLabel: 'Moteur de recherche : {name}. Cliquez pour changer.', searchSubmit: 'Rechercher', timeClick: 'Cliquez pour alterner entre 24 h, 12 h et l’heure complète', askAiCaption: 'Demander à l’IA' },
-  es: { colorMode: 'Modo de color', themeAuto: 'Tema del sistema', themeDark: 'Tema oscuro', themeLight: 'Tema claro', langLabel: 'Idioma', searchLabel: 'Buscar en la web', searchFormTitle: 'Escribe una búsqueda y pulsa Intro', engineLabel: 'Buscador: {name}. Haz clic para cambiar.', searchSubmit: 'Buscar', timeClick: 'Haz clic para alternar entre 24 horas, 12 horas y hora completa', askAiCaption: 'Preguntar a la IA' },
-  zh: { colorMode: '颜色模式', themeAuto: '跟随系统', themeDark: '深色主题', themeLight: '浅色主题', langLabel: '语言', searchLabel: '搜索网页', searchFormTitle: '输入搜索内容并按 Enter', engineLabel: '搜索引擎：{name}。点击切换。', searchSubmit: '搜索', timeClick: '点击可在 24 小时制、12 小时制和完整时间之间切换', askAiCaption: '询问 AI' },
+  en: { colorMode: 'Color mode', themeAuto: 'System theme', themeDark: 'Dark theme', themeLight: 'Light theme', themeMenuAuto: 'System', themeMenuDark: 'Dark', themeMenuLight: 'Light', langLabel: 'Language', searchLabel: 'Search the web', searchFormTitle: 'Type a search and press Enter', engineLabel: 'Search engine: {name}. Click to change.', searchSubmit: 'Search', timeClick: 'Click to cycle through 24-hour, 12-hour and full time', askAiCaption: 'Ask AI' },
+  nl: { colorMode: 'Kleurmodus', themeAuto: 'Systeemthema', themeDark: 'Donker thema', themeLight: 'Licht thema', themeMenuAuto: 'Systeem', themeMenuDark: 'Donker', themeMenuLight: 'Licht', langLabel: 'Taal', searchLabel: 'Zoek op het web', searchFormTitle: 'Typ een zoekopdracht en druk op Enter', engineLabel: 'Zoekmachine: {name}. Klik om te wisselen.', searchSubmit: 'Zoeken', timeClick: 'Klik om te wisselen tussen 24 uur, 12 uur en volledige tijd', askAiCaption: 'Vraag AI' },
+  de: { colorMode: 'Farbmodus', themeAuto: 'Systemdesign', themeDark: 'Dunkles Design', themeLight: 'Helles Design', themeMenuAuto: 'System', themeMenuDark: 'Dunkel', themeMenuLight: 'Hell', langLabel: 'Sprache', searchLabel: 'Im Web suchen', searchFormTitle: 'Suchbegriff eingeben und Enter drücken', engineLabel: 'Suchmaschine: {name}. Klicken zum Wechseln.', searchSubmit: 'Suchen', timeClick: 'Klicken, um zwischen 24-Stunden-, 12-Stunden- und Vollzeit zu wechseln', askAiCaption: 'KI fragen' },
+  fr: { colorMode: 'Mode couleur', themeAuto: 'Thème système', themeDark: 'Thème sombre', themeLight: 'Thème clair', themeMenuAuto: 'Système', themeMenuDark: 'Sombre', themeMenuLight: 'Clair', langLabel: 'Langue', searchLabel: 'Rechercher sur le web', searchFormTitle: 'Saisissez une recherche et appuyez sur Entrée', engineLabel: 'Moteur de recherche : {name}. Cliquez pour changer.', searchSubmit: 'Rechercher', timeClick: 'Cliquez pour alterner entre 24 h, 12 h et l’heure complète', askAiCaption: 'Demander à l’IA' },
+  es: { colorMode: 'Modo de color', themeAuto: 'Tema del sistema', themeDark: 'Tema oscuro', themeLight: 'Tema claro', themeMenuAuto: 'Sistema', themeMenuDark: 'Oscuro', themeMenuLight: 'Claro', langLabel: 'Idioma', searchLabel: 'Buscar en la web', searchFormTitle: 'Escribe una búsqueda y pulsa Intro', engineLabel: 'Buscador: {name}. Haz clic para cambiar.', searchSubmit: 'Buscar', timeClick: 'Haz clic para alternar entre 24 horas, 12 horas y hora completa', askAiCaption: 'Preguntar a la IA' },
+  zh: { colorMode: '颜色模式', themeAuto: '跟随系统', themeDark: '深色主题', themeLight: '浅色主题', themeMenuAuto: '系统', themeMenuDark: '深色', themeMenuLight: '浅色', langLabel: '语言', searchLabel: '搜索网页', searchFormTitle: '输入搜索内容并按 Enter', engineLabel: '搜索引擎：{name}。点击切换。', searchSubmit: '搜索', timeClick: '点击可在 24 小时制、12 小时制和完整时间之间切换', askAiCaption: '询问 AI' },
 }
 const advancedText = {
   en: { advTitle: 'Advanced settings', advancedOpen: 'Advanced', advancedClosed: '← Back to basic settings' },
@@ -1104,6 +1107,19 @@ const applySettingsText = () => {
     button.title = t[key]
     button.setAttribute('aria-label', t[key])
   })
+  if (topThemeTrigger) {
+    topThemeTrigger.setAttribute('aria-label', t.colorMode)
+  }
+  if (topThemeMenu) topThemeMenu.setAttribute('aria-label', t.colorMode)
+  topThemeItems.forEach((item) => {
+    const menuKey = { auto: 'themeMenuAuto', dark: 'themeMenuDark', light: 'themeMenuLight' }[item.dataset.themeValue]
+    const labelKey = { auto: 'themeAuto', dark: 'themeDark', light: 'themeLight' }[item.dataset.themeValue]
+    if (menuKey) {
+      const span = item.querySelector('span')
+      if (span) span.textContent = t[menuKey]
+    }
+    if (labelKey) item.setAttribute('aria-label', t[labelKey])
+  })
   searchForm.title = t.searchFormTitle
   document.querySelector('label[for="search"]').textContent = t.searchLabel
   document.getElementById('go').title = t.searchSubmit
@@ -1443,7 +1459,12 @@ settingsFields.lang.addEventListener('change', () => onLangChange(settingsFields
 if (topLangTrigger && topLangMenu) {
   topLangTrigger.addEventListener('click', (e) => {
     e.stopPropagation()
-    setLangMenuOpen(topLangMenu.hidden)
+    if (!topLangMenu.hidden) {
+      closeLangMenu()
+      return
+    }
+    closeThemeMenu()
+    setLangMenuOpen(true)
   })
   topLangItems.forEach((item) => {
     item.addEventListener('click', () => {
@@ -2302,26 +2323,72 @@ document.getElementById('quote').addEventListener('click', () => {
   showQuote()
 })
 
+const setTheme = (value) => {
+  if (value === 'auto') {
+    delete root.dataset.theme
+    try { localStorage.removeItem('theme') } catch {}
+  } else {
+    root.dataset.theme = value
+    try { localStorage.setItem('theme', value) } catch {}
+  }
+  showTheme()
+}
+
 const showTheme = () => {
   const stored = root.dataset.theme || 'auto'
   modeButtons.forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.themeValue === stored))
   })
+  topThemeItems.forEach((item) => {
+    item.setAttribute('aria-checked', String(item.dataset.themeValue === stored))
+  })
+  if (topThemeTrigger) {
+    const source = document.querySelector(`#modes-group [data-theme-value="${stored}"] svg`)
+    if (source) topThemeTrigger.innerHTML = source.outerHTML
+    const labelKey = { auto: 'themeAuto', dark: 'themeDark', light: 'themeLight' }[stored]
+    if (labelKey && typeof t !== 'undefined' && t[labelKey]) topThemeTrigger.title = t[labelKey]
+  }
 }
 
 modeButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    const value = button.dataset.themeValue
-    if (value === 'auto') {
-      delete root.dataset.theme
-      try { localStorage.removeItem('theme') } catch {}
-    } else {
-      root.dataset.theme = value
-      try { localStorage.setItem('theme', value) } catch {}
-    }
-    showTheme()
-  })
+  button.addEventListener('click', () => setTheme(button.dataset.themeValue))
 })
+
+const setThemeMenuOpen = (open) => {
+  if (!topThemeMenu || !topThemeTrigger) return
+  topThemeMenu.hidden = !open
+  topThemeTrigger.setAttribute('aria-expanded', String(open))
+}
+const closeThemeMenu = () => setThemeMenuOpen(false)
+
+if (topThemeTrigger && topThemeMenu) {
+  topThemeTrigger.addEventListener('click', (e) => {
+    e.stopPropagation()
+    if (!topThemeMenu.hidden) {
+      closeThemeMenu()
+      return
+    }
+    closeLangMenu()
+    setThemeMenuOpen(true)
+  })
+  topThemeItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      closeThemeMenu()
+      setTheme(item.dataset.themeValue)
+    })
+  })
+  document.addEventListener('click', (e) => {
+    if (topThemeMenu.hidden) return
+    if (e.target.closest('.theme-anchor')) return
+    closeThemeMenu()
+  })
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || topThemeMenu.hidden) return
+    closeThemeMenu()
+    topThemeTrigger.focus()
+  })
+}
+
 showTheme()
 
 window.onload = () => {
