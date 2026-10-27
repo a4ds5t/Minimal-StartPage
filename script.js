@@ -1554,7 +1554,7 @@ const mergeImport = (payload) => {
     const key = normalizeUrl(item.url)
     if (aiKeys.has(key)) { result.dupes++; return }
     if (askAiList.length >= ASK_AI_LIMIT) { result.skipped++; return }
-    askAiList = [...askAiList, { key: '', title: item.title, url: item.url }]
+    askAiList = [...askAiList, normalizeAskAiItem({ key: '', title: item.title, url: item.url })]
     aiKeys.add(key)
     result.added++
   })
@@ -2104,10 +2104,26 @@ const aiCatalog = [
   { key: 'kagi', title: 'Kagi', url: 'https://assistant.kagi.com/' },
   { key: 'meta', title: 'Meta AI', url: 'https://www.meta.ai/' },
 ]
+const catalogKeyForUrl = (url) => aiCatalog.find((service) => normalizeUrl(service.url) === normalizeUrl(url))?.key || ''
+const normalizeAskAiItem = (item) => {
+  const catalogKey = catalogKeyForUrl(item.url)
+  return catalogKey ? { ...item, key: catalogKey } : item
+}
+const askAiKeyFor = (item) => {
+  const catalogKey = catalogKeyForUrl(item.url)
+  if (catalogKey && askAiIcons[catalogKey]) return catalogKey
+  if (item.key && askAiIcons[item.key]) return item.key
+  return catalogKey || item.key || ''
+}
 let askAiList = defaultAskAi.map((item) => ({ ...item }))
 try {
   const saved = JSON.parse(localStorage.getItem('askAiList') || 'null')
-  if (Array.isArray(saved)) askAiList = saved.filter((item) => item && typeof item.title === 'string' && safeUrl(item.url)).slice(0, ASK_AI_LIMIT)
+  if (Array.isArray(saved)) {
+    askAiList = saved
+      .filter((item) => item && typeof item.title === 'string' && safeUrl(item.url))
+      .map(normalizeAskAiItem)
+      .slice(0, ASK_AI_LIMIT)
+  }
 } catch {}
 const askAiRow = document.getElementById('ask-ai-list')
 const aiList = document.getElementById('ai-list')
@@ -2157,9 +2173,10 @@ const checkIconOnce = (url) => {
 
 // The built-in icon, or the site's icon for a custom shortcut; null when there is none to show.
 const askAiIconNode = (item) => {
-  if (askAiIcons[item.key]) {
+  const key = askAiKeyFor(item)
+  if (askAiIcons[key]) {
     const svg = el('span', 'ai-icon')
-    svg.innerHTML = askAiIcons[item.key]
+    svg.innerHTML = askAiIcons[key]
     return svg
   }
   const icon = item.icon === false ? '' : faviconOf(item.url)
@@ -2202,7 +2219,8 @@ const renderAskAi = () => {
     if (aiNewTab) { link.target = '_blank'; link.rel = 'noopener' }
     link.title = item.title
     link.setAttribute('aria-label', item.title)
-    if (askAiIcons[item.key]) link.innerHTML = askAiIcons[item.key]
+    const iconKey = askAiKeyFor(item)
+    if (askAiIcons[iconKey]) link.innerHTML = askAiIcons[iconKey]
     else {
       // A custom shortcut shows the site's icon; if there is none, its name stays.
       const icon = item.icon === false ? '' : faviconOf(item.url)
