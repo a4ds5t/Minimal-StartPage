@@ -3,6 +3,7 @@
 // Uses the same offline setup as smoke.js: no network, example links only.
 
 const { chromium } = require('playwright');
+const sharp = require('sharp');
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
@@ -70,15 +71,34 @@ const exampleLinks = [
     localStorage.setItem('links', JSON.stringify(links));
     localStorage.setItem('zones', JSON.stringify(['Europe/Amsterdam', 'America/New_York']));
     localStorage.setItem('askAiList', JSON.stringify([
-      { title: 'Claude', url: 'https://claude.ai/' },
-      { title: 'ChatGPT', url: 'https://chat.openai.com/' },
-      { title: 'Grok', url: 'https://grok.com/' },
+      { key: 'claude', title: 'Claude', url: 'https://claude.ai/' },
+      { key: 'chatgpt', title: 'ChatGPT', url: 'https://chatgpt.com/' },
+      { key: 'grok', title: 'Grok', url: 'https://grok.com/' },
     ]));
     localStorage.setItem('engine', 'DuckDuckGo');
   }, exampleLinks);
   await page.reload();
   await page.waitForSelector('#engine svg');
   await page.waitForTimeout(400);
+
+  const marketingShot = async (theme, filename) => {
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.evaluate((t) => {
+      localStorage.setItem('theme', t);
+      localStorage.setItem('hintSeen', '1');
+      localStorage.setItem('askai', 'on');
+      localStorage.setItem('quote', 'off');
+      localStorage.setItem('preset', 'standard');
+    }, theme);
+    await page.reload();
+    await page.waitForSelector('#searchform');
+    await page.waitForTimeout(500);
+    const png = await page.locator('#container').screenshot({ type: 'png' });
+    await sharp(png).webp({ quality: 90 }).toFile(path.resolve(ROOT, 'assets', filename));
+  };
+  await page.setViewportSize({ width: 1280, height: 1500 });
+  await marketingShot('light', 'screenshot_light.webp');
+  await marketingShot('dark', 'screenshot_dark.webp');
 
   // Landing SEARCH frame + live search bar (variant D rail), not a thin bar-only strip.
   const quickstartPath = path.resolve(ROOT, 'assets', 'quickstart-search.png');
