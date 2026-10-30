@@ -5,6 +5,7 @@
   "license": "PolyForm-Noncommercial-1.0.0",
   "description": "Cloudflare Worker (static assets) for Minimal StartPage at start.soholocal.nl.",
   "scripts": {
+    "prebuild": "node scripts/generate-build-info.js",
     "dev": "wrangler dev",
     "check": "wrangler deploy --dry-run",
     "test:seo": "node --test landing-seo.test.js"

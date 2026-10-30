@@ -5,6 +5,9 @@
   "name": "minimal-startpage",
   "main": "worker.js",
   "compatibility_date": "2026-10-25",
+  "build": {
+    "command": "node scripts/generate-build-info.js"
+  },
   "assets": {
     "directory": "./",
     "binding": "ASSETS",

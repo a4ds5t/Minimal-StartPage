@@ -1,8 +1,8 @@
 name: Set app version from release
 
-# When a release is published, the release tag becomes the app version (1.4 for v1.4),
-# and the date of the release becomes the "last updated" date in the app. The screenshots in
-# docs/images are then retaken, so they show that version.
+# When a release is published, the release tag becomes the app version (1.4 for v1.4).
+# The deploy timestamp in the app comes from build-info.js at Wrangler build time.
+# The screenshots in docs/images are then retaken, so they show that version.
 # Minor numbers (1.4.1, 1.4.2 …) are still set by hand in script.js between releases.
 
 on:
@@ -22,17 +22,14 @@ jobs:
         with:
           ref: main
 
-      - name: Write the release version and date into script.js
+      - name: Write the release version into script.js
         run: |
           VERSION="${TAG#v}"
           case "$VERSION" in
             ""|*[!0-9.]*) echo "Unexpected tag: $TAG"; exit 1 ;;
           esac
-          UPDATED=$(TZ=Europe/Amsterdam date +%d-%m-%Y)
           sed -i -E "s/^const APP_VERSION = '[^']*'/const APP_VERSION = '${VERSION}'/" script.js
-          sed -i -E "s/^const APP_UPDATED = '[^']*'/const APP_UPDATED = '${UPDATED}'/" script.js
           grep -q "^const APP_VERSION = '${VERSION}'" script.js || { echo "Could not set APP_VERSION"; exit 1; }
-          grep -q "^const APP_UPDATED = '${UPDATED}'" script.js || { echo "Could not set APP_UPDATED"; exit 1; }
 
       - uses: actions/setup-node@v4
         with:

@@ -26,3 +26,6 @@ docs/**
 
 tests
 tests/**
+
+scripts
+scripts/**
