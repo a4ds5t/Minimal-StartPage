@@ -1,6 +1,6 @@
 # Screenshots
 
-The settings and data windows, for a quick look at what the page can do. The start page itself is at the top of the [README](../README.md).
+The settings and data windows, for a quick look at what the page can do. The live app is at [start.soholocal.nl/app](https://start.soholocal.nl/app); the start page itself is linked at the top of the [README](../README.md).
 
 The marketing landing page (`homepage.html`) uses `assets/quickstart-search.png` in the Search section: a beige frame around the live search bar, with the engine icon and thin vertical rail (variant D). Regenerate it with `node screenshots.js` from the `tests` folder after search-bar changes.
 

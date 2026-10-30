@@ -29,3 +29,6 @@ tests/**
 
 scripts
 scripts/**
+
+landing-seo.js
+landing-seo.test.js
