@@ -2450,11 +2450,6 @@ button.action:disabled {
   color: var(--color-fg-2);
 }
 
-.app-version a {
-  color: inherit;
-  text-decoration: underline;
-}
-
 /* Long labels wrap inside the button instead of spilling over its border. */
 .adv-group .ghost-button {
   height: auto;
