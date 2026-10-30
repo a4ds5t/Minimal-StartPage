@@ -1,5 +1,5 @@
 // Retakes the screenshots in docs/images from the current page, so they show the current version and options.
-// Run with: node screenshots.js (from the tests folder). The release workflow runs it after setting the version.
+// Run with: node screenshots.js (from the tests folder). Run manually when docs/images need updating.
 // Uses the same offline setup as smoke.js: no network, example links only.
 
 const { chromium } = require('playwright');

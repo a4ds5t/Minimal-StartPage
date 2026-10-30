@@ -13,7 +13,7 @@ The one place for how the page is built, why it is built that way, what is still
 
 - Work happens on a branch, and each change goes in through a pull request.
 - Every change to the app bumps the version: the last number goes up. Documentation-only changes do not bump it.
-- A release is made on GitHub with a whole version as tag (`v1.5`). The workflow `.github/workflows/set-version.yml` then sets the version and the date in the app, and retakes the screenshots.
+- A release is made on GitHub with a whole version as tag (`v1.5`). `APP_VERSION` in `script.js` must already match that tag; bump it in the pull requests that ship the release. Deploy with Wrangler (or the API); the deploy timestamp comes from `build-info.js` at build time. Retake screenshots with `tests/screenshots.js` when the UI changes warrant it.
 - After a release: write the file in `docs/changelog/`, for example `v1.5.md`, and add a row to its index.
 
 ## Decisions
@@ -60,7 +60,7 @@ The one place for how the page is built, why it is built that way, what is still
 ## Versions and releases
 
 - The app shows the release number (1.4, 1.5 …). Between releases, a change gets a third number (1.4.1, 1.4.2 …), set by hand in script.js.
-- A published release sets the version and the date in the app, and retakes the screenshots, through .github/workflows/set-version.yml. The page does not ask GitHub for the version at runtime, so nothing extra leaves the page.
+- `APP_VERSION` in `script.js` is the source of truth; bump it in pull requests. The build timestamp in the version tag comes from `build-info.js` when Wrangler deploys. The page does not ask GitHub for the version at runtime, so nothing extra leaves the page.
 - Documentation-only changes do not change the app version.
 
 ## Not decided

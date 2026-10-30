@@ -23,7 +23,7 @@ So `wrangler deploy` and `wrangler versions upload` (and `wrangler deploy --dry-
 
 If `build-info.js` is missing (for example opening `index.html` via `file://`), the tag still shows `v{APP_VERSION}` and the popover omits the timestamp line.
 
-`APP_VERSION` in `script.js` remains the version source; it is bumped by hand between releases (and by the release workflow for tagged releases).
+`APP_VERSION` in `script.js` remains the version source; bump it by hand in pull requests before tagging a release.
 
 ## Reusing in another app
 
