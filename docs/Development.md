@@ -4,7 +4,7 @@ The one place for how the page is built, why it is built that way, what is still
 
 ## How the page is built
 
-- Plain HTML, CSS and JavaScript, with no build step. GitHub Pages serves the files as they are.
+- Plain HTML, CSS and JavaScript, with no browser bundle build step. Production runs on a [Cloudflare Worker](https://start.soholocal.nl) (landing on `/` and `/nl`, app on `/app`). Deploy with Wrangler; repo docs and tooling stay in git only (see `.assetsignore`). The site used to be hosted on GitHub Pages.
 - `script.js` holds the logic and the translations. `quotes.js` holds the quote pool.
 - Tests: `tests/smoke.js` runs 17 checks in Chromium (Playwright), with all outside services mocked. Run them from the `tests` folder with `npm test`.
 - Screenshots: `tests/screenshots.js` takes the pictures in `docs/images` from the page, so they show the current version.

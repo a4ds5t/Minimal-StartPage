@@ -135,6 +135,8 @@ Short notes, one topic each:
 - [docs/changelog/README.md](docs/changelog/README.md): what changed in each version.
 - [Installation.md](Installation.md): how to install a copy.
 
+Production is served by a Cloudflare Worker at [start.soholocal.nl](https://start.soholocal.nl) (not GitHub Pages). To run locally: `npm install`, then `npm run dev` or `npm run check` (Wrangler deploy dry-run).
+
 ---
 
 ## Credits

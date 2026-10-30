@@ -44,12 +44,33 @@ export default {
     }
 
     if (isBlockedPath(path)) {
-      return new Response("Not Found", { status: 404 });
+      return withSecurityHeaders(new Response("Not Found", { status: 404 }));
     }
 
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (!assetResponse.ok) return assetResponse;
+    return cloneResponseWithHeaders(assetResponse);
   },
 };
+
+function applySecurityHeaders(headers) {
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("X-Frame-Options", "SAMEORIGIN");
+  headers.set("Content-Security-Policy", "frame-ancestors 'self'");
+}
+
+function cloneResponseWithHeaders(response) {
+  const headers = new Headers(response.headers);
+  applySecurityHeaders(headers);
+  return new Response(response.body, { status: response.status, headers });
+}
+
+function withSecurityHeaders(response) {
+  const headers = new Headers(response.headers);
+  applySecurityHeaders(headers);
+  return new Response(response.body, { status: response.status, headers });
+}
 
 const REDIRECTS = {
   "/homepage": "/",
@@ -76,6 +97,7 @@ async function serveHomepage(env, request, locale) {
   const headers = new Headers(response.headers);
   headers.set("content-type", "text/html; charset=utf-8");
   headers.set("cache-control", headers.get("cache-control") || "public, max-age=0, must-revalidate");
+  applySecurityHeaders(headers);
   return new Response(body, { status: response.status, headers });
 }
 
@@ -87,5 +109,6 @@ async function serveAsset(env, request, assetPath) {
 
   const headers = new Headers(response.headers);
   headers.set("cache-control", headers.get("cache-control") || "public, max-age=0, must-revalidate");
+  applySecurityHeaders(headers);
   return new Response(response.body, { status: response.status, headers });
 }
